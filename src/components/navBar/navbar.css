@@ -1,0 +1,32 @@
+:root{
+  --brand-700:#2b2e7a;    /* tom principal da faixa superior */
+  --brand-800:#24265f;    /* tom mais escuro p/ degradê */
+}
+
+.navbar-hero{
+  background: linear-gradient(180deg, var(--brand-700), var(--brand-800));
+  padding-block: .9rem;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.pillMenu{
+  display: inline-flex;
+  gap: .25rem;
+  padding: .25rem;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  background: rgba(255,255,255,.06);
+}
+
+.pillMenu .nav-link{
+  color:#fff;
+  opacity:.9;
+  padding: .4rem .9rem;
+  border-radius: 999px;
+}
+
+.pillMenu .nav-link.active{
+  color:#1f2244 !important;
+  background:#fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+}

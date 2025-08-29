@@ -1,0 +1,19 @@
+.home-hero{
+  background: linear-gradient(180deg, #2b2e7a, #24265f);
+  color:#fff;
+  padding: 64px 0 48px;
+}
+
+.home-hero h1{
+  letter-spacing: .2px;
+}
+
+.hero-placeholder{
+  width: 100%;
+  aspect-ratio: 16/10;
+  background:
+    radial-gradient(120% 120% at 10% 10%, rgba(255,255,255,.25), transparent 60%),
+    radial-gradient(120% 120% at 90% 20%, rgba(255,255,255,.15), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.25);
+}
