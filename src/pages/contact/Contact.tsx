@@ -3,6 +3,10 @@ import { FaComments, FaEnvelope, FaPhoneAlt, FaArrowRight } from "react-icons/fa
 import "./contact.css";
 
 export default function Contact() {
+    const CHAT_COVER   = new URL("../../assets/contact/chat.jpg",   import.meta.url).href;
+    const EMAIL_COVER  = new URL("../../assets/contact/email.jpg",  import.meta.url).href;
+    const PHONE_COVER  = new URL("../../assets/contact/phone.jpg",  import.meta.url).href;
+
   return (
     <>
         {/* HERO */}
@@ -23,22 +27,22 @@ export default function Contact() {
                 <Col md={4}>
                 <div className="card-3d">
                     <div className="flip-inner">
-                    <div className="face front contact-card">
-                        <div className="icon-badge"><FaComments /></div>
-                        <h5 className="card-title">Chat Online</h5>
-                        <p className="card-text">Atendimento em tempo real com nossa equipe.</p>
-                    </div>
-                    <div className="face back contact-back">
-                        <h5 className="mb-2">Chat Online</h5>
-                        <p className="mb-3 opacity-75">Fale com a nossa equipe agora.</p>
-                        <Button
-                        className="btn-pill btn-cta"
-                        as="button"
-                        onClick={() => {/* abrir chat aqui depois */}}
-                        >
-                        Iniciar Chat
-                        </Button>
-                    </div>
+                        <div className="face front contact-card">
+                            <div className="icon-badge"><FaComments /></div>
+                            <h5 className="card-title">Chat Online</h5>
+                            <p className="card-text">Atendimento em tempo real com nossa equipe.</p>
+                        </div>
+                        <div className="face back contact-back">
+                            <h5 className="mb-2">Chat Online</h5>
+                            <p className="mb-3 opacity-75">Fale com a nossa equipe agora.</p>
+                            <Button
+                            className="btn-pill btn-cta"
+                            as="button"
+                            onClick={() => {/* abrir chat aqui depois */}}
+                            >
+                            Iniciar Chat
+                            </Button>
+                        </div>
                     </div>
                 </div>
                 </Col>

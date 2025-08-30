@@ -1,0 +1,87 @@
+/* hero com a mesma paleta */
+.portfolio-hero{
+  background: linear-gradient(180deg, #2b2e7a, #24265f);
+  color:#fff;
+  padding: 56px 0 40px;
+}
+.portfolio-hero .title{
+  font-weight: 800;
+  letter-spacing:.2px;
+  text-transform: uppercase;
+}
+.portfolio-hero .subtitle{ opacity:.9; margin-top:.5rem; }
+
+/* card do portfólio */
+.folio-card{
+  position: relative;
+  display: block;
+  height: 260px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+  text-decoration: none;
+  color: inherit;
+}
+
+.folio-card .thumb,
+.folio-card .thumb img{
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.folio-card .thumb img{
+  object-fit: cover;
+  transition: transform .5s ease, opacity .35s ease, filter .35s ease;
+}
+
+/* rótulo */
+.folio-card .label{
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: .5rem 1rem;
+  background: rgba(255,255,255,.95);
+  color: #1f2244;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing:.2px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.12);
+}
+
+/* seta central */
+.arrow-wrap{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: translateY(8px) scale(.95);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.arrow-wrap svg{
+  background: #ffffff;
+  color: #1f2244;
+  border-radius: 999px;
+  padding: .7rem;
+  width: 44px; height: 44px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.15);
+}
+
+/* efeito hover: imagem “meio invisível” e seta aparece */
+.folio-card:hover .thumb img{
+  opacity: .28;
+  transform: scale(1.04);
+  filter: grayscale(.15);
+}
+.folio-card:hover .arrow-wrap{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* responsividade */
+@media (min-width: 1200px){
+  .folio-card{ height: 300px; }
+}

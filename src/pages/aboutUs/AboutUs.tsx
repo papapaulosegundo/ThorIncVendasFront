@@ -20,7 +20,7 @@ const TEAM = [
     cargo: "Backend & Integrações",
   },
   {
-    nome: "Bruno",
+    nome: "Bruno Pacek",
     foto: new URL("../../assets/ImagemIntegrantes/Bruno.jpeg", import.meta.url).href,
     cargo: "Backend & Integrações",
   },
@@ -41,7 +41,7 @@ export default function AboutUs() {
       {/* Cards de equipe */}
       <section className="py-5">
         <Container>
-          <Row className="g-4">
+          <Row className="g-5">
             {TEAM.map((m) => (
               <Col key={m.nome} xs={12} sm={6} lg={3}>
                 <Card className="team-card text-center">
@@ -49,8 +49,8 @@ export default function AboutUs() {
                     <img src={m.foto} alt={m.nome} />
                   </div>
                   <Card.Body>
-                    <Card.Title className="mb-1">{m.nome}</Card.Title>
-                    <Card.Text className="text-secondary small">{m.cargo}</Card.Text>
+                    <Card.Title className="mb-2">{m.nome}</Card.Title>
+                    <Card.Text className="ms-2">{m.cargo}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
