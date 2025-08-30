@@ -34,7 +34,7 @@ export default function NavbarApp() {
         <Navbar.Collapse id="main-nav" className="justify-content-end">
           <Nav className="pillMenu">
             <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
-            <Nav.Link as={NavLink} to="/servicos" disabled>Serviços</Nav.Link>
+            <Nav.Link as={NavLink} to="/servicos#opcoes">Serviços</Nav.Link>
             <Nav.Link as={NavLink} to="/portfolio">Portfólio</Nav.Link>
             <Nav.Link as={NavLink} to="/sobre">Sobre Nós</Nav.Link>
             <Nav.Link as={NavLink} to="/contato">Contato</Nav.Link>
