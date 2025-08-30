@@ -1,7 +1,6 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
 import "./home.css";
-// Se quiser usar imagem, descomente as duas linhas abaixo e coloque um hero.jpg na pasta assets
-// import hero from "../assets/hero.jpg";
+import heroImage from "../../assets/imagemHome.webp";
 
 function Home() {
   return (
@@ -30,10 +29,11 @@ function Home() {
             </Col>
 
             <Col lg={5}>
-              {/* Se quiser imagem, use o bloco abaixo */}
-              {/* <img src={hero} alt="Ilustração" className="img-fluid rounded-4 shadow" /> */}
-              {/* Placeholder minimalista */}
-              <div className="hero-placeholder rounded-4 shadow-sm d-none d-lg-block" />
+              <img
+                src={heroImage}
+                alt="Banner da Home"
+                className="img-fluid rounded-4 shadow"
+              />
             </Col>
           </Row>
         </Container>
@@ -42,6 +42,7 @@ function Home() {
       {/* “features” rápidas (opcional, bem minimalista) */}
       <section className="py-5 bg-body-tertiary">
         <Container>
+          <h3>Nossos últimos projetos</h3>
           <Row className="g-4">
             <Col md={4}>
               <div className="p-4 bg-white rounded-4 shadow-sm h-100">
