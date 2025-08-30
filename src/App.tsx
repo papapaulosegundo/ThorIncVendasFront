@@ -1,17 +1,21 @@
+import { Routes, Route } from "react-router-dom";
 import NavbarApp from "./components/navBar/Navbar";
-import Home from "./pages/home/Home";
-import "./app.css";
 import Footer from "./components/footer/Footer";
+import Home from "./pages/home/Home";
+import AboutUs from "./pages/aboutUs/AboutUs";
+import Contact from "./pages/contact/Contact";
+import "./app.css";
 
-
-function App() {
+export default function App() {
   return (
     <>
       <NavbarApp />
-      <Home />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sobre" element={<AboutUs />} />
+        <Route path="/contato" element={<Contact />} />
+      </Routes>
       <Footer />
     </>
   );
 }
-
-export default App;

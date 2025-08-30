@@ -1,21 +1,43 @@
+import { useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import "./navbar.css"; 
+// quando tiver router: import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import "./navbar.css";
+import logoImage from "../../assets/logoThor2.webp";
 
-function NavbarApp() {
+export default function NavbarApp() {
+  const [shrink, setShrink] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShrink(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <Navbar expand="lg" className="navbar-hero" data-bs-theme="dark">
-      <Container className="d-flex align-items-center gap-3">
-        <Navbar.Brand className="fw-bold">Thor Vendas</Navbar.Brand>
+    <Navbar
+      expand="lg"
+      className={`navbar-hero sticky-top ${shrink ? "navbar-shrink shadow-sm" : ""}`}
+      data-bs-theme="dark"
+    >
+      <Container className="justify-content-between">
+        {/* Quando usar router, troque href="/" por: as={Link} to="/" */}
+        <Navbar.Brand as={Link} to="/" aria-label="Ir para a Home" className="brand">
+          <span className="brand-badge">
+            <img src={logoImage} alt="Thor Inc" />
+          </span>
+          <span className="brand-title">Thor Vendas</span>
+        </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-nav" />
-        <Navbar.Collapse id="main-nav">
-          {/* menu central com formato pill */}
-          <Nav className="mx-auto pillMenu">
-            <Nav.Link className="active">Home</Nav.Link>
-            <Nav.Link disabled>Serviços</Nav.Link>
-            <Nav.Link disabled>Portfólio</Nav.Link>
-            <Nav.Link disabled>Sobre Nós</Nav.Link>
-            <Nav.Link disabled>Contato</Nav.Link>
+        <Navbar.Collapse id="main-nav" className="justify-content-end">
+          <Nav className="pillMenu">
+            <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
+            <Nav.Link as={NavLink} to="/servicos" disabled>Serviços</Nav.Link>
+            <Nav.Link as={NavLink} to="/portfolio" disabled>Portfólio</Nav.Link>
+            <Nav.Link as={NavLink} to="/sobre">Sobre Nós</Nav.Link>
+            <Nav.Link as={NavLink} to="/contato">Contato</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -23,4 +45,3 @@ function NavbarApp() {
   );
 }
 
-export default NavbarApp;
