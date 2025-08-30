@@ -17,8 +17,9 @@
   outline: none;                     /* para foco sem borda azul (opcional) */
 }
 @media (min-width: 768px){
-  .card-3d{ min-height: 380px; }     /* um pouco mais alto em telas médias+ */
+  .card-3d{ min-height: 480px; }  /* antes 380px */
 }
+
 
 .flip-inner{
   position: relative;
@@ -42,21 +43,48 @@
 
 /* frente reaproveita o estilo dos cards anteriores */
 .contact-card{
-  padding: 1.25rem 1.25rem 1.5rem;
-  background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86));
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;          /* centraliza VERTICAL */
+  gap: .8rem;                       /* espaço uniforme entre itens */
+  padding: 1.5rem 1.25rem 1.75rem;
+
+  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.88));
   border: 1px solid rgba(0,0,0,.06);
   box-shadow: 0 8px 24px rgba(0,0,0,.08);
   text-align: center;
+
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 .icon-badge{
-  width: 56px; height: 56px; margin: 0 auto .75rem;
+  width: 56px; height: 56px;
+  margin: 0 auto 1rem;              /* ↑ mais afastado do título */
   border-radius: 50%;
   background: #2b2e7a; color: #fff;
-  display: grid; place-items: center; font-size: 1.25rem;
+  display: grid; place-items: center;
+  font-size: 1.25rem;
   box-shadow: 0 6px 18px rgba(43,46,122,.3);
   transition: transform .6s ease;
 }
+
+.card-title{
+  font-weight: 700;
+  font-size: 1.25rem;               /* ↑ um pouco maior */
+  letter-spacing: .2px;
+  margin: 0;                        /* controlado pelo gap do container */
+  color:#1f2244;
+}
+
+.card-text{
+  color:#59607a;
+  margin: 0;
+  line-height: 1.55;
+  max-width: 28ch;                  /* largura de leitura mais elegante */
+}
+
 .card-3d:hover .icon-badge{ transform: rotate(180deg); }
 
 .card-title{ font-weight: 700; margin-bottom: .25rem; color:#1f2244; }
@@ -95,3 +123,103 @@
   border: 1px solid rgba(255,255,255,.35);
 }
 .btn-ghost:hover{ background: rgba(255,255,255,.08); }
+
+
+/* ===== FORMULÁRIO SEÇÃO ===== */
+.contact-form-wrap{
+  padding: 8px 0 64px;
+  /* mantém o fundo da página; se quiser faixa clara, troque por bg: #f6f7fb; */
+}
+
+.contact-form-card{
+  max-width: 980px;
+  border-radius: 28px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(31,34,68,.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,.20);
+  backdrop-filter: blur(2px);
+}
+
+.form-title{
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #1f2244;
+}
+
+/* labels */
+.contact-form-card .form-label{
+  text-transform: uppercase;
+  letter-spacing: .12rem;
+  font-size: .78rem;
+  color: #8b91ab;
+  margin-bottom: .35rem;
+}
+.req{ color: #f05454; }
+
+/* inputs pílula */
+.input-pill.form-control,
+.input-pill.form-select{
+  border-radius: 999px;
+  padding: .7rem 1rem;
+  border: 1px solid rgba(31,34,68,.15);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.04);
+  background-color: #fff;
+}
+
+.input-pill:focus{
+  border-color: #2b2e7a;
+  box-shadow: 0 0 0 .2rem rgba(43,46,122,.15);
+}
+
+/* botão CTA */
+.btn-send{
+  border-radius: 999px;
+  padding: .75rem 1.35rem;
+  font-weight: 600;
+  letter-spacing: .2px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border: none;
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(34,197,94,.35);
+  transition: transform .12s ease, filter .12s ease;
+}
+.btn-send:hover{ filter: brightness(.98); transform: translateY(-1px); }
+.btn-send:active{ transform: translateY(0); }
+
+
+
+/* ===== MAPA SEÇÃO ===== */
+.contact-map{
+  padding: 32px 0 72px;
+}
+
+.map-title{
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #1f2244;
+}
+
+.map-embed{
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(31,34,68,.12);
+  box-shadow: 0 12px 36px rgba(0,0,0,.18);
+}
+
+.map-embed iframe{
+  display: block;
+  width: 100%;
+  height: 420px;       /* altura padrão do mapa */
+  border: 0;
+}
+
+@media (min-width: 992px){
+  .map-embed iframe{ height: 520px; } /* um pouco maior no desktop */
+}
+
+.map-open-link{
+  color: #2b2e7a;
+  text-decoration: none;
+  font-weight: 600;
+}
+.map-open-link:hover{ text-decoration: underline; }
