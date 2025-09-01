@@ -1,11 +1,65 @@
 import { Container, Row, Col, Button, Card, Form } from "react-bootstrap";
 import { FaComments, FaEnvelope, FaPhoneAlt, FaArrowRight } from "react-icons/fa";
 import "./contact.css";
+/*import Swal, { SweetAlertResult } from 'sweetalert2';
+import api from '@/services/api'; // quando existir*/
 
 export default function Contact() {
-    const CHAT_COVER   = new URL("../../assets/contact/chat.jpg",   import.meta.url).href;
-    const EMAIL_COVER  = new URL("../../assets/contact/email.jpg",  import.meta.url).href;
-    const PHONE_COVER  = new URL("../../assets/contact/phone.jpg",  import.meta.url).href;
+
+/*enviarFormularioContato = () => {
+  Swal.fire({
+    title: 'Confirmar envio?',
+    text: 'Deseja enviar o formulário de contato agora?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sim, enviar',
+    cancelButtonText: 'Cancelar'
+  }).then(async (result) => {
+    if (!result.isConfirmed) return;
+
+    // opcional: estado de loading
+    this.setState({ loadingEnvio: true });
+
+    try {
+      // === POST FICTÍCIO (troque pelo seu endpoint real) ===
+      // await api.post('/contato/enviar', {
+      //   nome: this.state.nome,
+      //   email: this.state.email,
+      //   empresa: this.state.empresa,
+      //   segmento: this.state.segmento
+      // });
+
+      // Simula requisição (remova quando tiver backend)
+      await new Promise(r => setTimeout(r, 900));
+
+      Swal.fire({
+        title: 'Enviado com sucesso!',
+        text: 'Recebemos seu formulário. Em breve entraremos em contato.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+
+      // Chamada fictícia pós-envio (troque pelo que precisar)
+      if (this.consultaFormulario) this.consultaFormulario();
+    } catch (error) {
+      let erro_msg = 'Erro ao enviar o formulário. Tente novamente.';
+      if (error?.response?.status === 500) {
+        erro_msg = 'Servidor indisponível no momento.';
+      } else if (error?.response?.status === 403) {
+        erro_msg = 'Você não tem permissão para realizar esta ação.';
+      }
+
+      Swal.fire({
+        title: 'Erro!',
+        text: erro_msg,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      this.setState({ loadingEnvio: false });
+    }
+  });
+};*/
 
   return (
     <>
@@ -60,7 +114,7 @@ export default function Contact() {
                         </div>
                         <div className="face back contact-back">
                         <h5 className="mb-2">E-mail</h5>
-                        <p className="mb-3 opacity-75">Envie um email para nossa equipe.</p>
+                        <p className="mb-3 opacity-75">Envie um email para nossa equipe. <br></br> contato@thorinc.com</p>
                         <div className="d-flex gap-2 flex-wrap justify-content-center">
                             <Button className="btn-pill btn-cta" href="mailto:contato@thorinc.com">
                             Enviar e-mail
@@ -154,8 +208,8 @@ export default function Contact() {
                     </Row>
 
                     <div className="text-center mt-4">
-                        <Button type="submit" className="btn-send">
-                        Enviar Formulário <FaArrowRight className="ms-3" />
+                        <Button type="button" variant="success" className="btn-send">
+                        Enviar Formulário <FaArrowRight className="ms-1" />
                         </Button>
                     </div>
                     </Form>

@@ -3,7 +3,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 // quando tiver router: import { Link } from "react-router-dom";
 import { Link, NavLink } from "react-router-dom";
 import "./navbar.css";
-import logoImage from "../../assets/logoThor2.webp";
+import logoImage from "../../assets/Preview.png";
 
 export default function NavbarApp() {
   const [shrink, setShrink] = useState(false);
@@ -27,14 +27,16 @@ export default function NavbarApp() {
           <span className="brand-badge">
             <img src={logoImage} alt="Thor Inc" />
           </span>
-          <span className="brand-title">Thor Vendas</span>
+          {/** 
+          <span className="brand-title">Thor</span>
+          */}
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-nav" />
         <Navbar.Collapse id="main-nav" className="justify-content-end">
           <Nav className="pillMenu">
             <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
-            <Nav.Link as={NavLink} to="/servicos#opcoes">Serviços</Nav.Link>
+            <Nav.Link as={NavLink} to="/servicos">Serviços</Nav.Link>
             <Nav.Link as={NavLink} to="/portfolio">Portfólio</Nav.Link>
             <Nav.Link as={NavLink} to="/sobre">Sobre Nós</Nav.Link>
             <Nav.Link as={NavLink} to="/contato">Contato</Nav.Link>

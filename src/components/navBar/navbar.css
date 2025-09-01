@@ -34,23 +34,22 @@
 .brand{ gap: .75rem; }
 
 .brand-badge{
-  width: 48px;                /* diâmetro normal */
+  width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #fff;
+  background: #fff;                 /* mantém o anel/brilho externo */
   border: 1px solid rgba(255,255,255,.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
-  transition: transform .25s ease, width .25s ease, height .25s ease;
-}
-.brand-badge img{
-  max-width: 72%;
-  max-height: 72%;
-  object-fit: contain;
+  overflow: hidden;                  /* corta a imagem no círculo */
+  display: flex; align-items: center; justify-content: center;
 }
 
+.brand-badge img{
+  width: 100%;                       /* preencher tudo */
+  height: 100%;
+  object-fit: cover;                 /* cobre sem distorcer */
+  display: block;
+  /* remova os antigos max-width/max-height: 72% */
+}
 /* Encolher levemente a “badge” no scroll */
 .navbar-shrink .brand-badge{
   width: 40px;
@@ -73,22 +72,56 @@
 
 /* ---- Pill menu (o seu existente) ---- */
 .pillMenu{
-  display: inline-flex;
-  gap: .25rem;
-  padding: .25rem;
-  border: 1px solid rgba(255,255,255,.25);
-  border-radius: 999px;
-  background: rgba(255,255,255,.06);
+  gap: .6rem;                 /* antes: .25rem */
+  padding: .35rem .5rem;      /* antes: .25rem */
+  border-width: 1.5px;        /* borda um tiquinho mais firme */
 }
+
+/* Links mais confortáveis */
 .pillMenu .nav-link{
-  color:#fff;
-  opacity:.9;
-  padding:.4rem .9rem;
-  border-radius:999px;
+  padding: .60rem 1.10rem;    /* antes: .4rem .9rem */
+  font-size: 1rem;            /* levemente maior */
+  line-height: 1;             /* evita “aperto” vertical */
 }
+
+/* Estado ativo continua com pílula branca */
 .pillMenu .nav-link.active{
-  color:#1f2244 !important;
-  background:#fff;
-  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+  box-shadow: 0 6px 18px rgba(0,0,0,.16);
 }
+
+
+/* +respiro entre itens */
+
+.pillMenu{ gap: .9rem; }                 
+.pillMenu .nav-link{ padding: .6rem .2rem; font-weight: 600; }
+
+/* feedback minimalista: sublinhado suave em hover/ativo */
+.pillMenu .nav-link{
+  position: relative;
+  opacity: .95;
+}
+.pillMenu .nav-link::after{
+  content:"";
+  position:absolute; left:0; right:0; bottom:-6px;
+  height:2px; border-radius:2px;
+  background: rgba(255,255,255,.55);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .18s ease;
+}
+.pillMenu .nav-link:hover::after,
+.pillMenu .nav-link.active::after{
+  transform: scaleX(1);
+}
+
+/* foco via teclado (acessível) */
+.pillMenu .nav-link:focus-visible{
+  outline: 2px solid rgba(255,255,255,.7);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* pequeno ajuste quando encolher */
+.navbar-hero.navbar-shrink .pillMenu{ gap: .75rem; }
+.navbar-hero.navbar-shrink .pillMenu .nav-link{ padding: .5rem .15rem; }
 
