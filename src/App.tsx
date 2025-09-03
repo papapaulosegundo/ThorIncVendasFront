@@ -13,19 +13,19 @@ import "./app.css";
 export default function App() {
   return (
     <>
-      <NavbarApp />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sobre" element={<AboutUs />} />
-        <Route path="/contato" element={<Contact />} />
-        <Route path="/portfolio" element={<Portfolio />} />
+      <NavbarApp/>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sobre" element={<AboutUs />} />
+          <Route path="/contato" element={<Contact />} />
+          <Route path="/portfolio" element={<Portfolio />} />
 
-        <Route path="/servicos" element={<Services />} />
-        <Route path="/servicos/ecommerce" element={<Ecommerce />} />
-        <Route path="/servicos/websites" element={<Websites />} />
+          <Route path="/servicos" element={<Services />} />
+          <Route path="/servicos/ecommerce" element={<Ecommerce />} />
+          <Route path="/servicos/websites" element={<Websites />} />
 
-      </Routes>
-      <Footer />
+        </Routes>
+      <Footer/>
     </>
   );
 }

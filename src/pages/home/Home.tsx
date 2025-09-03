@@ -2,9 +2,10 @@ import { Container, Row, Col, Button} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import "./home.css";
 import { Link } from "react-router-dom";
-import { FaTools, FaLayerGroup, FaHandshake } from "react-icons/fa";
+import { FaFileImage, FaLayerGroup, FaHandshake } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import CustomerLoop from "../../components/CustomerLoop/CustomerLoop";
 
-const heroBg = new URL("../../assets/TesteCipreste.webp", import.meta.url).href;
 
 const HERO_IMAGES = [
   new URL("../../assets/Prototipos/Montanhismo.webp", import.meta.url).href,
@@ -12,7 +13,19 @@ const HERO_IMAGES = [
   new URL("../../assets/Prototipos/Farmacia.webp", import.meta.url).href,
 ];
 
+const LOGOS = [
+  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Nestlé", href: "https://www.nestle.com/" },
+  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Pulse" },
+  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Nordestão" },
+  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Tidmo" },
+  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Rui Cadete" },
+  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Activesoft" },
+];
+
+
 export default function Home() {
+
+  const navigate = useNavigate();
 
   const [idx, setIdx] = useState(0);
 
@@ -22,16 +35,14 @@ export default function Home() {
 
     const id = setInterval(
       () => setIdx((i) => (i + 1) % HERO_IMAGES.length),
-      8000
+      5000
     );
     return () => clearInterval(id);
   }, []);
 
   return (
     <>
-      {/* HERO tipo “Wix” */}
       <section className="home-hero full">
-        {/* camada de slides (fundo) */}
         <div className="hero-slides">
           {HERO_IMAGES.map((src, i) => (
             <div
@@ -57,7 +68,7 @@ export default function Home() {
             </p>
 
             <div className="actions">
-              <Button className="btn-hero" variant="outline-dark">
+              <Button className="btn-hero" variant="outline-dark" onClick={() => navigate("/contato")}>
                 Fale Conosco!
               </Button>
             </div>
@@ -65,18 +76,24 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* SEÇÃO de apoio (3 colunas) */}
+      {/* SEÇÃO 3 colunas */}
       <section className="home-sections">
         <Container>
+          <header className="section-header text-center">
+            <h2 className="section-heading">
+              Temos a Solução Ideal para seu Negócio
+            </h2>
+          </header>
+
           <Row className="g-4 align-items-stretch">
             <Col sm={12} md={6} lg={4}>
               <article className="feature-card">
-                <div className="feature-icon"><FaTools /></div>
-                <h3 className="feature-title">Serviços</h3>
+                <div className="feature-icon"><FaFileImage /></div>
+                <h3 className="feature-title">Desenvolvimento Web</h3>
                 <p className="feature-text">
-                  Construímos lojas virtuais e sites institucionais com foco em conversão,
-                  desempenho e escalabilidade. Integramos pagamentos, ERP e analytics para
-                  você crescer com segurança.
+                    Com nossos sistemas reutilizaveís e o atendimento da nossa equipe
+                    seu Website ficará pronto de maneira rapída, com muita efetividade
+                    Venha buscar novos horizontes com o time do Thor.
                 </p>
                 <Link to="/servicos#opcoes" className="feature-cta">Ver serviços</Link>
               </article>
@@ -87,8 +104,9 @@ export default function Home() {
                 <div className="feature-icon"><FaLayerGroup /></div>
                 <h3 className="feature-title">Projetos</h3>
                 <p className="feature-text">
-                  Um portfólio com cases reais: e-commerce, landing pages e soluções sob
-                  medida. Veja o que já entregamos e como podemos aplicar ao seu cenário.
+                    Com nosso portfólio com clientes de diversas áreas, mostra que nós conseguimos
+                    atender clientes de diferentes ramos e extrair a essência para cada cliente
+                    transformando a ideia em algo com vida.
                 </p>
                 <Link to="/portfolio" className="feature-cta">Ver portfólio</Link>
               </article>
@@ -99,14 +117,25 @@ export default function Home() {
                 <div className="feature-icon"><FaHandshake /></div>
                 <h3 className="feature-title">Seja Nosso Cliente</h3>
                 <p className="feature-text">
-                  Parcerias de longo prazo: suporte contínuo, evolução do produto e
-                  acompanhamento de métricas para garantir resultado e previsibilidade.
+                  Nosso clientes tem o melhor que tem no mercado de Desenvolvimento, com nossa equipe
+                  você garante suporte contínuo do website, além da hospedagem e buscando sempre a evolução do seu produto!
                 </p>
                 <Link to="/contato" className="feature-cta">Fale com a gente</Link>
               </article>
             </Col>
           </Row>
         </Container>
+      </section>
+
+      <section>
+        <CustomerLoop
+          emphasis="+100 empresas"
+          rest="estão prosperando no Thor"
+          logos={LOGOS}
+          speed={30}          
+          logoHeight={30}     
+          grayscale          
+        />
       </section>
     </>
   );

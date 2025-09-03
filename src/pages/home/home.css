@@ -125,17 +125,16 @@
 
 
 
-/* ===== seção inferior (3 colunas) ===== */
-/* seção */
+/* Seção dos Cards de Caracteristicas */
+
 .home-sections{
   background:#fff;
   color:#1f2244;
   padding: 68px 0 88px;
 }
 
-/* card base = mesma altura em todas as colunas */
 .feature-card{
-  height: 100%;                         /* <- iguala a altura */
+  height: 100%;                        
   display: flex;
   flex-direction: column;
   gap: .75rem;
@@ -176,7 +175,7 @@
 
 /* CTA sempre “no rodapé” do card */
 .feature-cta{
-  margin-top: auto;                     /* empurra o link pra baixo */
+  margin-top: auto;                    
   align-self: flex-start;
   text-decoration: none;
   font-weight: 600;
@@ -197,3 +196,29 @@
   .feature-card{ padding: 20px; }
 }
 
+
+/* Cabeçalho/título da seção */
+.section-header{
+  margin-bottom: 1.70rem;          /* respiro entre título e cards */
+}
+
+.section-heading{
+  font-weight: 800;
+  letter-spacing: .02em;
+  font-size: clamp(1.25rem, 0.9rem + 2vw, 2rem);  /* responsivo */
+  margin: 0;
+  color: #1f2244;
+  position: relative;
+}
+
+/* barra sutil decorativa abaixo do título (opcional) */
+.section-heading::after{
+  content:"";
+  display:block;
+  width: 82px;
+  height: 3px;
+  margin: .6rem auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2b2e7a, #24265f);
+  opacity: .9;
+}
