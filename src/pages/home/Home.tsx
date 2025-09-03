@@ -15,11 +15,11 @@ const HERO_IMAGES = [
 
 const LOGOS = [
   { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Nestlé", href: "https://www.nestle.com/" },
-  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Pulse" },
-  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Nordestão" },
-  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Tidmo" },
-  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Rui Cadete" },
-  { src: new URL("../../assets/logos/nestle.png", import.meta.url).href, alt: "Activesoft" },
+  { src: new URL("../../assets/logos/amazon2.png", import.meta.url).href, alt: "Amazon", href: "https://www.amazon.com.br/" },
+  { src: new URL("../../assets/logos/mercadoLivre.png", import.meta.url).href, alt: "Mercado Livre", href: "https://www.mercadolivre.com.br/" },
+  { src: new URL("../../assets/logos/ebay.png", import.meta.url).href, alt: "Ebay", href: "https://br.ebay.com/" },
+  { src: new URL("../../assets/logos/shopee.jpg", import.meta.url).href, alt: "Shopee", href: "https://shopee.com.br/" },
+  { src: new URL("../../assets/logos/magalu.png", import.meta.url).href, alt: "Magalu", href: "https://www.magazineluiza.com.br" },
 ];
 
 
