@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
-// quando tiver router: import { Link } from "react-router-dom";
+import { Container, Nav, Navbar} from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
 import "./navbar.css";
 import logoImage from "../../assets/Preview.png";
+import MenuServicos from "../../pages/services/MenuServicos";
 
 export default function NavbarApp() {
   const [shrink, setShrink] = useState(false);
@@ -36,7 +36,7 @@ export default function NavbarApp() {
         <Navbar.Collapse id="main-nav" className="justify-content-end">
           <Nav className="pillMenu">
             <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
-            <Nav.Link as={NavLink} to="/servicos">Serviços</Nav.Link>
+            <MenuServicos/>
             <Nav.Link as={NavLink} to="/portfolio">Portfólio</Nav.Link>
             <Nav.Link as={NavLink} to="/sobre">Sobre Nós</Nav.Link>
             <Nav.Link as={NavLink} to="/contato">Contato</Nav.Link>
