@@ -8,19 +8,12 @@ type Logo = {
 };
 
 type Props = {
-  /** Parte destacada no título, ex: "+100 empresas" */
   emphasis?: React.ReactNode;
-  /** Texto ao lado do destaque, ex: "estão escalando na Thor Inc" */
   rest?: React.ReactNode;
-  /** Lista de logos (PNG/SVG/WEBP) */
   logos: Logo[];
-  /** Duração (segundos) para um ciclo completo do marquee. Default: 28 */
   speed?: number;
-  /** Altura máxima de cada logo (px). Default: 44 */
   logoHeight?: number;
-  /** Monocromia (cinza) nos logos para harmonizar. Default: true */
   grayscale?: boolean;
-  /** Título alternativo completo (se quiser fornecer tudo num nó só) */
   titleOverride?: React.ReactNode;
   className?: string;
 };
