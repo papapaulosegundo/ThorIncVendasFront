@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";
 import { NavLink, useLocation } from "react-router-dom";
 import { FaShoppingCart, FaGlobe } from "react-icons/fa";
-import "./services.css";
+import "../../styles/index.css";
+
 
 export default function MenuServicos() {
   const [open, setOpen] = useState(false);
@@ -28,20 +29,10 @@ export default function MenuServicos() {
 
   return (
     <li
-      ref={wrapRef}
-      className={`nav-item services-mega ${open ? "is-open" : ""}`}
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
-    >
-      <button
-        className="nav-link services-trigger"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen((v) => !v)} // mobile
-        onFocus={() => setOpen(true)}
-      >
-        Serviços
-        <span className="caret" aria-hidden>▾</span>
+      ref={wrapRef} className={`nav-item services-mega ${open ? "is-open" : ""}`} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} >
+
+      <button className="nav-link services-trigger" aria-expanded={open} aria-haspopup="true" onClick={() => setOpen((v) => !v)} onFocus={() => setOpen(true)}>
+          Serviços <span className="caret" aria-hidden>▾</span>
       </button>
 
       {/* painel */}

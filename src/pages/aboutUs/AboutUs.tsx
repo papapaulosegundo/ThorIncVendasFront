@@ -1,7 +1,7 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { useEffect, useMemo, useState } from "react";
 import { FaLayerGroup, FaHandshake, FaFileImage} from "react-icons/fa";
-import "./aboutUs.css";
+import "../../styles/index.css";
 import CustomerLoop from "../../components/CustomerLoop/CustomerLoop";
 
 const Equipe = [

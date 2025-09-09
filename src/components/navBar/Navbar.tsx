@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Nav, Navbar} from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
-import "./navbar.css";
+import "../../styles/index.css";
 import logoImage from "../../assets/Preview.png";
 import MenuServicos from "../../pages/services/MenuServicos";
 

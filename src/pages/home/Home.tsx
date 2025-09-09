@@ -1,6 +1,6 @@
 import { Container, Row, Col, Button} from "react-bootstrap";
 import { useEffect, useState } from "react";
-import "./home.css";
+import "../../styles/index.css";
 import { Link } from "react-router-dom";
 import { FaFileImage, FaLayerGroup, FaHandshake } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";

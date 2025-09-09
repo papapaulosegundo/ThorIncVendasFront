@@ -1,6 +1,7 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaGlobe, FaMobileAlt, FaRocket } from "react-icons/fa";
-import "./serviceDetail.css";
+import "../../styles/index.css";
+
 
 export default function Websites() {
   return (

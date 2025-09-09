@@ -1,6 +1,7 @@
 import { Container, Row, Col, Button, Card, Form } from "react-bootstrap";
 import { FaComments, FaEnvelope, FaPhoneAlt, FaArrowRight } from "react-icons/fa";
-import "./contact.css";
+import "../../styles/index.css";
+
 /*import Swal, { SweetAlertResult } from 'sweetalert2';
 import api from '@/services/api'; // quando existir*/
 

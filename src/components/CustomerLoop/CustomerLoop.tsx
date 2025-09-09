@@ -1,5 +1,5 @@
 import React from "react";
-import "./customerLoop.css";
+import "../../styles/index.css";
 
 type Logo = {
   src: string;

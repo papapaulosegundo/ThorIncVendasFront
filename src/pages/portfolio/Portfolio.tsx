@@ -1,6 +1,6 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { FaArrowRight } from "react-icons/fa";
-import "./portfolio.css";
+import "../../styles/index.css";
 
 type Item = { title: string; img: string; href: string };
 

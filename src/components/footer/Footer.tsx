@@ -8,7 +8,8 @@ import {
   FaInstagram,
   FaGithub,
 } from "react-icons/fa";
-import "./footer.css";
+import "../../styles/index.css";
+
 
 function Footer() {
   return (
