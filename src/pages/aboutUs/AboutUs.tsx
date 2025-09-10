@@ -156,7 +156,7 @@ export default function AboutUs() {
           logos={LOGOS}
           speed={30}          
           logoHeight={30}    
-          grayscale           // opcional: manter logos em cinza
+          grayscale  
         />
       </section>
     </>

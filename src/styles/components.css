@@ -416,49 +416,6 @@
 }
 
 
-
-/* === CustomerLoop – compat com classes antigas === */
-
-/* variáveis + padding iguais ao original */
-.cm-section{
-  --cm-gap: 48px;
-  --cm-duration: 28s;
-  padding: 28px 0 8px;
-}
-
-/* container local (se não estiver usando .u-container no JSX) */
-.cm-section .container{
-  width: min(var(--container-max), 92vw);
-  margin: 0 auto;
-}
-
-/* header */
-.cm-header{ text-align:center; margin-bottom:18px; }
-
-/* título (espelha .u-title) */
-.cm-title{
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: .01em;
-  font-size: clamp(1.25rem, 1rem + 1.6vw, 2rem);
-  line-height: 1.2;
-  text-align: center;
-  color: var(--ink-900);
-}
-.cm-title-rest{ opacity:.95; }
-
-/* destaque “rabiscado” (alias de .c-highlight) */
-.cm-highlight{
-  display:inline-block; position:relative; z-index:0;
-  padding:.1rem .35rem; border-radius:999px; color:var(--brand-700);
-}
-.cm-highlight::before,
-.cm-highlight::after{
-  content:""; position:absolute; inset:-.45rem -.8rem;
-  border:5px solid rgba(43,46,122,.28); border-radius:999px; transform:rotate(-3deg);
-  z-index:-1;
-}
-
 /* viewport com a máscara nas laterais (caso não use .u-fade-mask) */
 .cm-viewport{
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
