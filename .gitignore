@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ignorar configs
+eslint.config.js
+postcss.config.js
+yarn.lock
