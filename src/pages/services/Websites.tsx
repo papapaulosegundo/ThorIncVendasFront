@@ -2,7 +2,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { FaShoppingCart, FaRocket, FaDesktop, FaGraduationCap } from "react-icons/fa";
 import "../../styles/index.css";
 import CustomerLoop from "../../components/CustomerLoop/CustomerLoop";
-import websiteImg from "../../assets/website.webp";
+import websiteImg from "../../assets/website2.webp";
 import homemProsperando from "../../assets/homemprosperando.webp";
 
 const LOGOS = [
