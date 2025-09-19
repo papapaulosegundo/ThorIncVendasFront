@@ -95,7 +95,7 @@ export default function Home() {
                     seu Website ficará pronto de maneira rapída, com muita efetividade
                     Venha buscar novos horizontes com o time do Thor.
                 </p>
-                <Link to="/servicos#opcoes" className="feature-cta">Ver serviços</Link>
+                <Link to="/servicos/ecommerce" className="feature-cta">Ver serviços</Link>
               </article>
             </Col>
 
