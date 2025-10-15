@@ -10,10 +10,8 @@ export default function MenuServicos() {
   const wrapRef = useRef<HTMLLIElement | null>(null);
   const { pathname } = useLocation();
 
-  // fecha ao navegar
   useEffect(() => { setOpen(false); }, [pathname]);
 
-  // fecha no ESC e clique fora
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     const onClick = (e: MouseEvent) => {

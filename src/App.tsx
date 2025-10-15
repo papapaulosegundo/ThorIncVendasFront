@@ -7,6 +7,7 @@ import Contact from "./pages/contact/Contact";
 import Portfolio from "./pages/portfolio/Portfolio";
 import Ecommerce from "./pages/services/Ecommerce";
 import Websites from "./pages/services/Websites";
+import ContactList from "./pages/contact/ContactList";
 import "./app.css";
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/servicos/ecommerce" element={<Ecommerce />} />
           <Route path="/servicos/websites" element={<Websites />} />
-
+          <Route path="/contatosFormulario" element={<ContactList />} />
         </Routes>
       <Footer/>
     </>

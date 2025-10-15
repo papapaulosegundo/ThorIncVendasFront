@@ -1,11 +1,52 @@
 import { Container, Row, Col, Button, Card, Form } from "react-bootstrap";
 import { FaComments, FaEnvelope, FaPhoneAlt, FaArrowRight } from "react-icons/fa";
 import "../../styles/index.css";
-
-/*import Swal, { SweetAlertResult } from 'sweetalert2';
-import api from '@/services/api'; // quando existir*/
+import { useState } from "react";
+import api from "../../services/api";
+import type { ContatoDTO } from "../../services/api";
+import Swal from 'sweetalert2';
 
 export default function Contact() {
+
+    const [form, setForm] = useState<ContatoDTO>({
+        nome: "",
+        email: "",
+        nomeEmpresa: "",
+        segmentoEmpresa: "",
+    });
+
+    const [sending, setSending] = useState(false);
+
+    function onChange<K extends keyof ContatoDTO>(key: K, value: ContatoDTO[K]) {
+        setForm(prev => ({ ...prev, [key]: value }));
+    }
+
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        try {setSending(true);
+            await api.post("/contatos", form);
+
+            await Swal.fire({
+                title: 'Enviado!',
+                text: 'Recebemos seu contato e retornaremos em breve.',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+                confirmButtonColor: '#198754', 
+            });
+
+            setForm({ nome: "", email: "", nomeEmpresa: "", segmentoEmpresa: "" });
+        } catch (err: any) {
+            const msg = err?.response?.data?.message || err?.message || 'Não foi possível enviar. Tente novamente.';
+            await Swal.fire({
+                title: 'Atenção',
+                text: msg,
+                icon: 'warning',
+                confirmButtonText: 'Ok',
+            });
+        } finally {
+            setSending(false);
+        }
+    }
 
   return (
     <>
@@ -99,59 +140,71 @@ export default function Contact() {
                 <Card.Body className="p-4 p-md-5">
                     <h2 className="form-title text-center mb-4">Formulário de Contato</h2>
 
-                    <Form onSubmit={(e) => e.preventDefault()} noValidate>
+                    <Form onSubmit={handleSubmit} noValidate>
                     <Row className="g-4">
                         <Col md={6}>
                         <Form.Group controlId="formNome">
-                            <Form.Label> Nome <span className="req">*</span> </Form.Label>
+                            <Form.Label>Nome <span className="req">*</span></Form.Label>
                             <Form.Control
                             type="text"
                             placeholder="Seu nome"
                             className="input-pill"
+                            required
+                            value={form.nome}
+                            onChange={(e) => onChange("nome", e.target.value)}
                             />
                         </Form.Group>
                         </Col>
 
                         <Col md={6}>
                         <Form.Group controlId="formEmail">
-                            <Form.Label> Email <span className="req">*</span> </Form.Label>
+                            <Form.Label>Email <span className="req">*</span></Form.Label>
                             <Form.Control
                             type="email"
                             placeholder="voce@email.com"
-                            required
                             className="input-pill"
+                            required
+                            value={form.email}
+                            onChange={(e) => onChange("email", e.target.value)}
                             />
                         </Form.Group>
                         </Col>
 
                         <Col md={6}>
                         <Form.Group controlId="formEmpresa">
-                            <Form.Label> Nome da empresa <span className="req">*</span> </Form.Label>
+                            <Form.Label>Nome da empresa <span className="req">*</span></Form.Label>
                             <Form.Control
                             type="text"
                             placeholder="Ex.: Barbecue Hellman's"
-                            required
                             className="input-pill"
+                            required
+                            value={form.nomeEmpresa}
+                            onChange={(e) => onChange("nomeEmpresa", e.target.value)}
                             />
                         </Form.Group>
                         </Col>
 
                         <Col md={6}>
                         <Form.Group controlId="formSegmento">
-                            <Form.Label> Segmento <span className="req">*</span> </Form.Label>
-                            <Form.Select required className="input-pill">
-                                <option value="">Selecione…</option>
-                                <option>E-commerce</option>
-                                <option>Website</option>
-                                <option>Outro</option>
+                            <Form.Label>Segmento <span className="req">*</span></Form.Label>
+                            <Form.Select
+                            required
+                            className="input-pill"
+                            value={form.segmentoEmpresa}
+                            onChange={(e) => onChange("segmentoEmpresa", e.target.value)}
+                            >
+                            <option value="">Selecione…</option>
+                            <option value="E-commerce">E-commerce</option>
+                            <option value="Website">Website</option>
+                            <option value="Outro">Outro</option>
                             </Form.Select>
                         </Form.Group>
                         </Col>
                     </Row>
 
                     <div className="text-center mt-4">
-                        <Button type="button" variant="success" className="btn-send">
-                        Enviar Formulário <FaArrowRight className="ms-1" />
+                        <Button type="submit" variant="success" className="btn-send" disabled={sending}>
+                        {sending ? "Enviando..." : <>Enviar Formulário <FaArrowRight className="ms-1" /></>}
                         </Button>
                     </div>
                     </Form>

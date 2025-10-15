@@ -40,6 +40,7 @@ export default function NavbarApp() {
             <Nav.Link as={NavLink} to="/portfolio">Portfólio</Nav.Link>
             <Nav.Link as={NavLink} to="/sobre">Sobre Nós</Nav.Link>
             <Nav.Link as={NavLink} to="/contato">Contato</Nav.Link>
+            <Nav.Link as={NavLink} to="/contatosFormulario">Formulários</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
