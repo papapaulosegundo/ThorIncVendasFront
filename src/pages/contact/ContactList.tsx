@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Container, Row, Col, Form, Table, Spinner, Card } from "react-bootstrap";
+import { Container, Row, Col, Form, Table, Spinner, Card, Button } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { FaTrash } from "react-icons/fa";
 import api from "../../services/api";
 import type { ContatoDTO } from "../../services/api";
 
@@ -10,6 +11,7 @@ export default function ContactList() {
   const [items, setItems] = useState<Contato[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterEmpresa, setFilterEmpresa] = useState("");
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
     useEffect(() => {
         (async () => {
@@ -20,10 +22,10 @@ export default function ContactList() {
         } catch (err: any) {
             console.error(err);
             Swal.fire({
-            title: "Erro ao carregar",
-            text: err?.response?.data?.message || err?.message || "Falha ao buscar contatos.",
-            icon: "error",
-            confirmButtonText: "Ok",
+                title: "Erro ao carregar",
+                text: err?.response?.data?.message || err?.message || "Falha ao buscar contatos.",
+                icon: "error",
+                confirmButtonText: "Ok",
             });
         } finally {
             setLoading(false);
@@ -31,14 +33,50 @@ export default function ContactList() {
         })();
     }, []);
 
-  const list = useMemo(() => {
-    const q = filterEmpresa.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((c) => (c.nomeEmpresa || "").toLowerCase().includes(q));
-  }, [items, filterEmpresa]);
+    const list = useMemo(() => {
+        const q = filterEmpresa.trim().toLowerCase();
+        if (!q) return items;
+        return items.filter((c) => (c.nomeEmpresa || "").toLowerCase().includes(q));
+    }, [items, filterEmpresa]);
+
+    async function handleDelete(row: Contato) {
+        const confirm = await Swal.fire({
+            title: "Excluir contato?",
+            text: `Remover o contato de "${row.nomeEmpresa}" (${row.nome}).`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Excluir",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#dc3545",
+            cancelButtonColor: "#7007d9ff",
+        });
+        if (!confirm.isConfirmed) return;
+
+        try {
+            setDeletingId(row.id);
+            await api.delete(`/contatos/${row.id}`);
+            setItems((prev) => prev.filter((i) => i.id !== row.id));
+            await Swal.fire({
+                title: "Excluído",
+                text: "O formulário foi removido com sucesso.",
+                icon: "success",
+                confirmButtonText: "Ok",
+            });
+        } catch (err: any) {
+            console.error(err);
+            Swal.fire({
+                title: "Erro ao excluir",
+                text: err?.response?.data?.message || err?.message || "Não foi possível excluir o formulário.",
+                icon: "error",
+                confirmButtonText: "Ok",
+            });
+        } finally {
+            setDeletingId(null);
+        }
+    }
 
   return (
-    <section className="py-4">
+    <section className="list-hero full">
       <Container>
         <Card className="mx-auto">
           <Card.Body className="p-3 p-md-4">
@@ -86,6 +124,11 @@ export default function ContactList() {
                           <td className="text-truncate" style={{ maxWidth: 240 }}>{c.email}</td>
                           <td>{c.nomeEmpresa}</td>
                           <td>{c.segmentoEmpresa}</td>
+                          <td className="text-end">
+                            <Button variant="outline-danger" size="sm" onClick={() => handleDelete(c)} disabled={deletingId === c.id} >
+                                <FaTrash className="me-1" /> {deletingId === c.id ? "Excluindo..." : "Excluir"}
+                            </Button>
+                          </td>
                         </tr>
                       ))
                     )}

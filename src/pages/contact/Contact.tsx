@@ -23,30 +23,68 @@ export default function Contact() {
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        try {setSending(true);
-            await api.post("/contatos", form);
+        if (sending) return;
+
+        const errMsg = validateForm();
+        if (errMsg) {
+            await Swal.fire({
+            title: "Dados incompletos",
+            text: errMsg,
+            icon: "warning",
+            confirmButtonText: "Ok",
+            });
+            return;
+        }
+
+        try {
+            setSending(true);
+            await api.post("/contatos", {
+                ...form,
+                nome: form.nome.trim(),
+                email: form.email.trim(),
+                nomeEmpresa: form.nomeEmpresa.trim(),
+                segmentoEmpresa: form.segmentoEmpresa.trim(),
+            });
 
             await Swal.fire({
-                title: 'Enviado!',
-                text: 'Recebemos seu contato e retornaremos em breve.',
-                icon: 'success',
-                confirmButtonText: 'Ok',
-                confirmButtonColor: '#198754', 
+                title: "Enviado!",
+                text: "Recebemos seu contato.",
+                icon: "success",
+                confirmButtonText: "Ok",
+                confirmButtonColor: "#198754",
             });
 
             setForm({ nome: "", email: "", nomeEmpresa: "", segmentoEmpresa: "" });
         } catch (err: any) {
-            const msg = err?.response?.data?.message || err?.message || 'Não foi possível enviar. Tente novamente.';
+            const msg = err?.response?.data?.message || err?.message || "Não foi possível enviar. Tente novamente.";
             await Swal.fire({
-                title: 'Atenção',
+                title: "Atenção",
                 text: msg,
-                icon: 'warning',
-                confirmButtonText: 'Ok',
+                icon: "error",
+                confirmButtonText: "Ok",
             });
         } finally {
             setSending(false);
         }
     }
+
+    const labels: Record<keyof ContatoDTO, string> = {
+        nome: "Nome",
+        email: "Email",
+        nomeEmpresa: "Nome da empresa",
+        segmentoEmpresa: "Segmento",
+        };
+
+        function validateForm(): string | null {
+        for (const k of Object.keys(labels) as (keyof ContatoDTO)[]) {
+            const v = String(form[k] ?? "").trim();
+            if (!v) return `Preencha o campo "${labels[k]}".`;
+        }
+        const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim());
+        if (!emailOk) return "Informe um e-mail válido.";
+        return null;
+    }
+
 
   return (
     <>
@@ -161,7 +199,7 @@ export default function Contact() {
                             <Form.Label>Email <span className="req">*</span></Form.Label>
                             <Form.Control
                             type="email"
-                            placeholder="voce@email.com"
+                            placeholder="empresa@email.com"
                             className="input-pill"
                             required
                             value={form.email}
@@ -175,7 +213,7 @@ export default function Contact() {
                             <Form.Label>Nome da empresa <span className="req">*</span></Form.Label>
                             <Form.Control
                             type="text"
-                            placeholder="Ex.: Barbecue Hellman's"
+                            placeholder="Ex.: Barbecue Cuccina's"
                             className="input-pill"
                             required
                             value={form.nomeEmpresa}
@@ -225,16 +263,12 @@ export default function Contact() {
                     loading="lazy"
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
-                ></iframe>
+                >   
+                </iframe>
                 </div>
 
                 <div className="text-center mt-2">
-                <a
-                    className="map-open-link"
-                    href="https://www.google.com/maps/search/?api=1&query=PUCPR%20Bloco%209%20Curitiba"
-                    target="_blank"
-                    rel="noreferrer"
-                >
+                <a className="map-open-link" href="https://www.google.com/maps/search/?api=1&query=PUCPR%20Bloco%209%20Curitiba" target="_blank" rel="noreferrer">
                     Abrir no Google Maps
                 </a>
                 </div>

@@ -634,3 +634,15 @@
   letter-spacing: .2px;
   color: var(--ink-900);
 }
+
+.list-hero {
+  position: relative;
+  background: #fff;              /* mantém a tela clara */
+}
+
+.list-hero.full {
+  min-height: 92vh;              /* ocupa quase a tela toda */
+  display: flex;
+  align-items: flex-start;        /* começa logo abaixo da navbar */
+  padding: 6vh 0 8vh;            /* ajuste fino do respiro */
+}

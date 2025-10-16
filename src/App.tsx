@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,useLocation } from "react-router-dom";
 import NavbarApp from "./components/navBar/Navbar";
 import Footer from "./components/footer/Footer";
 import Home from "./pages/home/Home";
@@ -8,9 +8,16 @@ import Portfolio from "./pages/portfolio/Portfolio";
 import Ecommerce from "./pages/services/Ecommerce";
 import Websites from "./pages/services/Websites";
 import ContactList from "./pages/contact/ContactList";
+import OpcoesClientes from "./pages/clients/OpcoesCliente";
+import CadastroCliente from "./pages/clients/CadastroCliente";
+import EditarCliente from "./pages/clients/EditarCliente";
 import "./app.css";
 
 export default function App() {
+  const { pathname } = useLocation();
+  const hideChrome = ["/contatosFormulario"];
+  const shouldHide = hideChrome.includes(pathname);
+
   return (
     <>
       <NavbarApp/>
@@ -22,8 +29,12 @@ export default function App() {
           <Route path="/servicos/ecommerce" element={<Ecommerce />} />
           <Route path="/servicos/websites" element={<Websites />} />
           <Route path="/contatosFormulario" element={<ContactList />} />
+
+          <Route path="/clientes/opcoes" element={<OpcoesClientes />}/>
+          <Route path="/clientes/cadastro" element={<CadastroCliente />}/>
+          <Route path="/clientes/edit" element={<EditarCliente />}/>
         </Routes>
-      <Footer/>
+      {!shouldHide && <Footer />}
     </>
   );
 }
