@@ -23,7 +23,7 @@ export default function EcommercePage() {
           <Row className="align-items-center">
             {/* Texto */}
             <Col lg={6} className="mb-4 mb-lg-0">
-              <span className="ecom-eyebrow">Criação de E-commerce</span>
+              <span className="ecom-eyebrow">Criação de Websites</span>
 
               <h1 className="ecom-title">
                 Aumente sua presença online{" "}

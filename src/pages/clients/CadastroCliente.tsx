@@ -1,90 +1,95 @@
-// src/pages/services/Categorias.tsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container, Row, Col, Card, Form, Button, Spinner, Alert } from "react-bootstrap";
 import Swal from "sweetalert2";
+import api from "../../services/api";
 import "../../styles/index.css";
 
-/*
-import { criarCategoria } from "../../../services/categoria";
-import type { Categoria } from "../../../services/categoria";*/
-
-// gera slug a partir do nome
-function slugify(s: string) {
-  return s
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
 type FormState = {
-  nome: string;
-  slug: string;
-  descricao: string;
-  ativo: boolean;
+  empresaTipoContrato: string;
+  empresaNome: string;
+  empresaLocal: string;
+  dataInicioContrato: string;
+  valorContrato: string;      
+  empresaContato: string;
 };
 
 export default function CadastroCliente() {
   const [form, setForm] = useState<FormState>({
-    nome: "",
-    slug: "",
-    descricao: "",
-    ativo: true,
+    empresaTipoContrato: "",
+    empresaNome: "",
+    empresaLocal: "",
+    dataInicioContrato: "",
+    valorContrato: "",
+    empresaContato: "",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  /*
-  // Atualiza o slug quando o nome muda (sem sobreescrever se o usuário editar manualmente)
-  useEffect(() => {
-    if (!form.slug || form.slug === slugify(form.nome)) {
-      setForm((s) => ({ ...s, slug: slugify(s.nome) }));
-    }
-  }, [form.nome]);
+  function onChange<K extends keyof FormState>(key: K, value: FormState[K]) {
+    setForm((s) => ({ ...s, [key]: value }));
+  }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target as any;
-    const val = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-    setForm((s) => ({ ...s, [name]: val }));
-  };
-
-  const isValid = form.nome.trim().length > 0 && form.slug.trim().length > 0;
+  function validate(): string | null {
+    if (!form.empresaTipoContrato) return "Selecione o tipo do contrato.";
+    if (!form.empresaNome.trim()) return "Informe o nome da empresa.";
+    if (!form.empresaLocal.trim()) return "Informe o local da empresa.";
+    if (!form.dataInicioContrato) return "Informe a data de início do contrato.";
+    const v = Number(form.valorContrato);
+    if (!form.valorContrato || Number.isNaN(v) || v < 0) return "Informe um valor de contrato válido.";
+    if (!form.empresaContato.trim()) return "Informe o contato responsável da empresa.";
+    return null;
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isValid) return;
+    if (saving) return;
 
-    setSaving(true);
-    setError(null);
+    const msg = validate();
+    if (msg) {
+      await Swal.fire({ title: "Dados incompletos", text: msg, icon: "warning", confirmButtonText: "Ok" });
+      return;
+    }
+
     try {
-      const payload: Categoria = {
-        nome: form.nome.trim(),
-        slug: form.slug.trim(),
-        descricao: form.descricao.trim() || undefined,
-        ativo: form.ativo,
-      };
+      setSaving(true);
+      setError(null);
 
-      await criarCategoria(payload);
-
-      Swal.fire({
-        icon: "success",
-        title: "Categoria criada!",
-        text: "A categoria foi salva com sucesso.",
-        timer: 1800,
-        showConfirmButton: false,
+      await api.post("/empresas", {
+        empresaTipoContrato: form.empresaTipoContrato,
+        empresaNome: form.empresaNome.trim(),
+        empresaLocal: form.empresaLocal.trim(),
+        dataInicioContrato: form.dataInicioContrato, 
+        valorContrato: Number(form.valorContrato),   
+        empresaContato: form.empresaContato.trim(),
       });
 
-      setForm({ nome: "", slug: "", descricao: "", ativo: true });
+      await Swal.fire({
+        icon: "success",
+        title: "Cadastrado!",
+        text: "Empresa parceira salva com sucesso.",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#198754",
+      });
+
+      setForm({
+        empresaTipoContrato: "",
+        empresaNome: "",
+        empresaLocal: "",
+        dataInicioContrato: "",
+        valorContrato: "",
+        empresaContato: "",
+      });
     } catch (err: any) {
-      setError(err?.response?.data ?? err?.message ?? "Erro ao salvar categoria.");
-      Swal.fire({ icon: "error", title: "Erro", text: error ?? "Falha ao salvar." });
+      const text = err?.response?.data?.message || err?.message || "Falha ao salvar.";
+      setError(text);
+      await Swal.fire({ icon: "error", title: "Erro", text });
     } finally {
       setSaving(false);
     }
-  }*/
+  }
 
   return (
-    <section className="home-sections">
+    <section className="list-hero full">
       <Container>
         <Row className="justify-content-center">
           <Col md={10} lg={8}>
@@ -92,89 +97,116 @@ export default function CadastroCliente() {
               <Card.Body>
                 <div className="d-flex align-items-center justify-content-between mb-3">
                   <div>
-                    <h2 className="h4 mb-1">Nova Categoria</h2>
+                    <h2 className="h4 mb-1">Nova Empresa Parceira</h2>
                     <small className="text-muted">
-                      Preencha as informações para adicionar uma categoria.
+                      Preencha as informações para adicionar uma nova empresa parceira.
                     </small>
                   </div>
                 </div>
 
                 {error && <Alert variant="danger" className="mb-3">{error}</Alert>}
 
-                <Form /*onSubmit={onSubmit}*/ noValidate>
+                <Form onSubmit={onSubmit} noValidate>
                   <Row className="g-3">
                     <Col md={6}>
-                      <Form.Group controlId="catNome">
-                        <Form.Label>Nome</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="nome"
-                          placeholder="Ex.: Camisetas"
-                          value={form.nome}
-                          /*onChange={handleChange}*/
+                      <Form.Group controlId="empresaTipoContrato">
+                        <Form.Label>Tipo do Contrato <span className="req">*</span></Form.Label>
+                        <Form.Select
                           required
-                          isInvalid={!form.nome.trim()}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          Informe o nome.
-                        </Form.Control.Feedback>
+                          className="input-pill"
+                          value={form.empresaTipoContrato}
+                          onChange={(e) => onChange("empresaTipoContrato", e.target.value)}
+                        >
+                          <option value="">Selecione…</option>
+                          <option value="E-commerce">E-commerce</option>
+                          <option value="Website">Website</option>
+                          <option value="Outro">Outro</option>
+                        </Form.Select>
                       </Form.Group>
                     </Col>
 
                     <Col md={6}>
-                      <Form.Group controlId="catSlug">
-                        <Form.Label>Slug</Form.Label>
+                      <Form.Group controlId="empresaNome">
+                        <Form.Label>Nome da Empresa <span className="req">*</span></Form.Label>
                         <Form.Control
                           type="text"
-                          name="slug"
-                          placeholder="ex.: camisetas"
-                          value={form.slug}
-                            /*onChange={handleChange}*/
+                          className="input-pill"
+                          value={form.empresaNome}
+                          onChange={(e) => onChange("empresaNome", e.target.value)}
                           required
-                          isInvalid={!form.slug.trim()}
                         />
-                        <Form.Text className="text-muted">
-                          Usado na URL (somente letras, números e hífens).
-                        </Form.Text>
-                        <Form.Control.Feedback type="invalid">
-                          Informe o slug.
-                        </Form.Control.Feedback>
                       </Form.Group>
                     </Col>
 
-                    <Col xs={12}>
-                      <Form.Group controlId="catDescricao">
-                        <Form.Label>Descrição</Form.Label>
+                    <Col md={8}>
+                      <Form.Group controlId="empresaLocal">
+                        <Form.Label>Local da Empresa <span className="req">*</span></Form.Label>
                         <Form.Control
-                          as="textarea"
-                          rows={3}
-                          name="descricao"
-                          placeholder="Descrição opcional da categoria…"
-                          value={form.descricao}
-                            /*onChange={handleChange}*/
+                          type="text"
+                          className="input-pill"
+                          value={form.empresaLocal}
+                          onChange={(e) => onChange("empresaLocal", e.target.value)}
+                          required
                         />
                       </Form.Group>
                     </Col>
 
-                    <Col xs={12}>
-                      <Form.Check
-                        type="switch"
-                        id="catAtivo"
-                        name="ativo"
-                        label="Ativo"
-                        checked={form.ativo}
-                        /*onChange={handleChange}*/
-                      />
+                    <Col xs={4}>
+                      <Form.Group controlId="dataInicioContrato">
+                        <Form.Label>Data Início Contrato <span className="req">*</span></Form.Label>
+                        <Form.Control
+                          type="date"
+                          className="input-pill"
+                          value={form.dataInicioContrato}
+                          onChange={(e) => onChange("dataInicioContrato", e.target.value)}
+                          required
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <Form.Group controlId="valorContrato">
+                        <Form.Label>Valor do Contrato <span className="req">*</span></Form.Label>
+                        <Form.Control
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          className="input-pill"
+                          value={form.valorContrato}
+                          onChange={(e) => onChange("valorContrato", e.target.value)}
+                          required
+                        />
+                      </Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                      <Form.Group controlId="empresaContato">
+                        <Form.Label>Contato Responsável Empresa <span className="req">*</span></Form.Label>
+                        <Form.Control
+                          type="text"
+                          className="input-pill"
+                          value={form.empresaContato}
+                          onChange={(e) => onChange("empresaContato", e.target.value)}
+                          required
+                        />
+                      </Form.Group>
                     </Col>
 
                     <Col xs={12} className="d-flex gap-2">
-                      <Button type="submit" variant="dark" /*disabled={!isValid || saving}*/ >
+                      <Button type="submit" variant="dark" disabled={saving}>
                         {saving ? (<><Spinner size="sm" className="me-2" /> Salvando…</>) : "Salvar"}
                       </Button>
                       <Button
                         variant="outline-secondary"
                         type="button"
-                        onClick={() => setForm({ nome: "", slug: "", descricao: "", ativo: true })}
+                        onClick={() => setForm({
+                          empresaTipoContrato: "",
+                          empresaNome: "",
+                          empresaLocal: "",
+                          dataInicioContrato: "",
+                          valorContrato: "",
+                          empresaContato: "",
+                        })}
                         disabled={saving}
                       >
                         Limpar

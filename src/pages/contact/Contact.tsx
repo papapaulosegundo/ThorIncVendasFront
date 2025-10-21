@@ -181,62 +181,62 @@ export default function Contact() {
                     <Form onSubmit={handleSubmit} noValidate>
                     <Row className="g-4">
                         <Col md={6}>
-                        <Form.Group controlId="formNome">
-                            <Form.Label>Nome <span className="req">*</span></Form.Label>
-                            <Form.Control
-                            type="text"
-                            placeholder="Seu nome"
-                            className="input-pill"
-                            required
-                            value={form.nome}
-                            onChange={(e) => onChange("nome", e.target.value)}
-                            />
-                        </Form.Group>
+                            <Form.Group controlId="formNome">
+                                <Form.Label>Nome <span className="req">*</span></Form.Label>
+                                <Form.Control
+                                type="text"
+                                placeholder="Seu nome"
+                                className="input-pill"
+                                required
+                                value={form.nome}
+                                onChange={(e) => onChange("nome", e.target.value)}
+                                />
+                            </Form.Group>
                         </Col>
 
                         <Col md={6}>
-                        <Form.Group controlId="formEmail">
-                            <Form.Label>Email <span className="req">*</span></Form.Label>
-                            <Form.Control
-                            type="email"
-                            placeholder="empresa@email.com"
-                            className="input-pill"
-                            required
-                            value={form.email}
-                            onChange={(e) => onChange("email", e.target.value)}
-                            />
-                        </Form.Group>
+                            <Form.Group controlId="formEmail">
+                                <Form.Label>Email <span className="req">*</span></Form.Label>
+                                <Form.Control
+                                type="email"
+                                placeholder="empresa@email.com"
+                                className="input-pill"
+                                required
+                                value={form.email}
+                                onChange={(e) => onChange("email", e.target.value)}
+                                />
+                            </Form.Group>
                         </Col>
 
                         <Col md={6}>
-                        <Form.Group controlId="formEmpresa">
-                            <Form.Label>Nome da empresa <span className="req">*</span></Form.Label>
-                            <Form.Control
-                            type="text"
-                            placeholder="Ex.: Barbecue Cuccina's"
-                            className="input-pill"
-                            required
-                            value={form.nomeEmpresa}
-                            onChange={(e) => onChange("nomeEmpresa", e.target.value)}
-                            />
-                        </Form.Group>
+                            <Form.Group controlId="formEmpresa">
+                                <Form.Label>Nome da empresa <span className="req">*</span></Form.Label>
+                                <Form.Control
+                                type="text"
+                                placeholder="Ex.: Barbecue Cuccina's"
+                                className="input-pill"
+                                required
+                                value={form.nomeEmpresa}
+                                onChange={(e) => onChange("nomeEmpresa", e.target.value)}
+                                />
+                            </Form.Group>
                         </Col>
 
                         <Col md={6}>
-                        <Form.Group controlId="formSegmento">
-                            <Form.Label>Segmento <span className="req">*</span></Form.Label>
-                            <Form.Select
-                            required
-                            className="input-pill"
-                            value={form.segmentoEmpresa}
-                            onChange={(e) => onChange("segmentoEmpresa", e.target.value)}
-                            >
-                            <option value="">Selecione…</option>
-                            <option value="E-commerce">E-commerce</option>
-                            <option value="Website">Website</option>
-                            <option value="Outro">Outro</option>
-                            </Form.Select>
-                        </Form.Group>
+                            <Form.Group controlId="formSegmento">
+                                <Form.Label>Segmento <span className="req">*</span></Form.Label>
+                                <Form.Select
+                                required
+                                className="input-pill"
+                                value={form.segmentoEmpresa}
+                                onChange={(e) => onChange("segmentoEmpresa", e.target.value)}
+                                >
+                                <option value="">Selecione…</option>
+                                <option value="E-commerce">E-commerce</option>
+                                <option value="Website">Website</option>
+                                <option value="Outro">Outro</option>
+                                </Form.Select>
+                            </Form.Group>
                         </Col>
                     </Row>
 

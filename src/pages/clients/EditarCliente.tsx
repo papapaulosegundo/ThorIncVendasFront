@@ -1,192 +1,363 @@
-// src/pages/services/Categorias.tsx
-import { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Form, Button, Spinner, Alert } from "react-bootstrap";
+// src/pages/clientes/EditarCliente.tsx
+import { useEffect, useMemo, useState } from "react";
+import {
+  Container, Row, Col, Form, Table, Spinner, Card, Button, Modal
+} from "react-bootstrap";
 import Swal from "sweetalert2";
-import "../../styles/index.css";
+import { FaTrash, FaEdit } from "react-icons/fa";
+import api from "../../services/api";
 
-/*
-import { criarCategoria } from "../../../services/categoria";
-import type { Categoria } from "../../../services/categoria";*/
+type Empresa = {
+  id: number;
+  empresaTipoContrato: string;
+  empresaNome: string;
+  empresaLocal: string;
+  dataInicioContrato: string;    
+  valorContrato: number | null;  
+  empresaContato: string;
+};
 
-// gera slug a partir do nome
-function slugify(s: string) {
-  return s
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
-
-type FormState = {
-  nome: string;
-  slug: string;
-  descricao: string;
-  ativo: boolean;
+type FormEmpresa = {
+  empresaTipoContrato: string;
+  empresaNome: string;
+  empresaLocal: string;
+  dataInicioContrato: string;
+  valorContrato: string;         
+  empresaContato: string;
 };
 
 export default function EditarCliente() {
-  const [form, setForm] = useState<FormState>({
-    nome: "",
-    slug: "",
-    descricao: "",
-    ativo: true,
+  const [items, setItems] = useState<Empresa[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filterEmpresa, setFilterEmpresa] = useState("");
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  // modal de edição
+  const [show, setShow] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [form, setForm] = useState<FormEmpresa>({
+    empresaTipoContrato: "",
+    empresaNome: "",
+    empresaLocal: "",
+    dataInicioContrato: "",
+    valorContrato: "",
+    empresaContato: "",
   });
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  /*
-  // Atualiza o slug quando o nome muda (sem sobreescrever se o usuário editar manualmente)
+  const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
   useEffect(() => {
-    if (!form.slug || form.slug === slugify(form.nome)) {
-      setForm((s) => ({ ...s, slug: slugify(s.nome) }));
-    }
-  }, [form.nome]);
+    (async () => {
+      try {
+        setLoading(true);
+        const { data } = await api.get<Empresa[]>("/empresas");
+        setItems(data || []);
+      } catch (err: any) {
+        console.error(err);
+        Swal.fire({
+          title: "Erro ao carregar",
+          text: err?.response?.data?.message || err?.message || "Falha ao buscar empresas.",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target as any;
-    const val = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
-    setForm((s) => ({ ...s, [name]: val }));
-  };
+  const list = useMemo(() => {
+    const q = filterEmpresa.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter((c) => (c.empresaNome || "").toLowerCase().includes(q));
+  }, [items, filterEmpresa]);
 
-  const isValid = form.nome.trim().length > 0 && form.slug.trim().length > 0;
+  function openEdit(row: Empresa) {
+    setEditId(row.id);
+    setForm({
+      empresaTipoContrato: row.empresaTipoContrato || "",
+      empresaNome: row.empresaNome || "",
+      empresaLocal: row.empresaLocal || "",
+      dataInicioContrato: row.dataInicioContrato || "",
+      valorContrato: row.valorContrato != null ? String(row.valorContrato) : "",
+      empresaContato: row.empresaContato || "",
+    });
+    setShow(true);
+  }
 
-  async function onSubmit(e: React.FormEvent) {
+  function onChange<K extends keyof FormEmpresa>(key: K, value: FormEmpresa[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    if (!isValid) return;
+    if (saving || editId == null) return;
 
-    setSaving(true);
-    setError(null);
     try {
-      const payload: Categoria = {
-        nome: form.nome.trim(),
-        slug: form.slug.trim(),
-        descricao: form.descricao.trim() || undefined,
-        ativo: form.ativo,
-      };
-
-      await criarCategoria(payload);
-
-      Swal.fire({
-        icon: "success",
-        title: "Categoria criada!",
-        text: "A categoria foi salva com sucesso.",
-        timer: 1800,
-        showConfirmButton: false,
+      setSaving(true);
+      await api.put(`/empresas/${editId}`, {
+        empresaTipoContrato: form.empresaTipoContrato,
+        empresaNome: form.empresaNome.trim(),
+        empresaLocal: form.empresaLocal.trim(),
+        dataInicioContrato: form.dataInicioContrato, // yyyy-MM-dd
+        valorContrato: form.valorContrato ? Number(form.valorContrato) : null,
+        empresaContato: form.empresaContato.trim(),
       });
 
-      setForm({ nome: "", slug: "", descricao: "", ativo: true });
+      // atualiza lista local
+      setItems((prev) =>
+        prev.map((it) =>
+          it.id === editId
+            ? {
+                ...it,
+                empresaTipoContrato: form.empresaTipoContrato,
+                empresaNome: form.empresaNome.trim(),
+                empresaLocal: form.empresaLocal.trim(),
+                dataInicioContrato: form.dataInicioContrato,
+                valorContrato: form.valorContrato ? Number(form.valorContrato) : null,
+                empresaContato: form.empresaContato.trim(),
+              }
+            : it
+        )
+      );
+
+      setShow(false);
+      await Swal.fire({
+        title: "Atualizado!",
+        text: "Dados da empresa salvos com sucesso.",
+        icon: "success",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#198754",
+      });
     } catch (err: any) {
-      setError(err?.response?.data ?? err?.message ?? "Erro ao salvar categoria.");
-      Swal.fire({ icon: "error", title: "Erro", text: error ?? "Falha ao salvar." });
+      console.error(err);
+      await Swal.fire({
+        title: "Erro ao salvar",
+        text: err?.response?.data?.message || err?.message || "Não foi possível atualizar.",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
     } finally {
       setSaving(false);
     }
-  }*/
+  }
+
+  async function handleDelete(row: Empresa) {
+    const confirm = await Swal.fire({
+      title: "Excluir empresa?",
+      text: `Remover "${row.empresaNome}"? Esta ação não pode ser desfeita.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Excluir",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#dc3545",
+      cancelButtonColor: "#6c757d",
+    });
+    if (!confirm.isConfirmed) return;
+
+    try {
+      setDeletingId(row.id);
+      await api.delete(`/empresas/${row.id}`);
+      setItems((prev) => prev.filter((i) => i.id !== row.id));
+      await Swal.fire({
+        title: "Excluída",
+        text: "A empresa foi removida com sucesso.",
+        icon: "success",
+        confirmButtonText: "Ok",
+      });
+    } catch (err: any) {
+      console.error(err);
+      Swal.fire({
+        title: "Erro ao excluir",
+        text: err?.response?.data?.message || err?.message || "Não foi possível excluir.",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   return (
-    <section className="home-sections">
+    <section className="list-hero full">
       <Container>
-        <Row className="justify-content-center">
-          <Col md={10} lg={8}>
-            <Card className="shadow-sm">
-              <Card.Body>
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <div>
-                    <h2 className="h4 mb-1">Nova Categoria</h2>
-                    <small className="text-muted">
-                      Preencha as informações para adicionar uma categoria.
-                    </small>
-                  </div>
-                </div>
+        <Card className="mx-auto">
+          <Card.Body className="p-3 p-md-4">
+            <Row className="align-items-center mb-3 g-2">
+              <Col>
+                <h2 className="m-0">Gestão de Empresas</h2>
+              </Col>
+              <Col md="auto" className="ms-auto" style={{ minWidth: 260 }}>
+                <Form.Control
+                  type="text"
+                  placeholder="Filtrar por nome da empresa…"
+                  value={filterEmpresa}
+                  onChange={(e) => setFilterEmpresa(e.target.value)}
+                  className="input-pill"
+                />
+              </Col>
+            </Row>
 
-                {error && <Alert variant="danger" className="mb-3">{error}</Alert>}
-
-                <Form /*onSubmit={onSubmit}*/ noValidate>
-                  <Row className="g-3">
-                    <Col md={6}>
-                      <Form.Group controlId="catNome">
-                        <Form.Label>Nome</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="nome"
-                          placeholder="Ex.: Camisetas"
-                          value={form.nome}
-                          /*onChange={handleChange}*/
-                          required
-                          isInvalid={!form.nome.trim()}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          Informe o nome.
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                      <Form.Group controlId="catSlug">
-                        <Form.Label>Slug</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="slug"
-                          placeholder="ex.: camisetas"
-                          value={form.slug}
-                            /*onChange={handleChange}*/
-                          required
-                          isInvalid={!form.slug.trim()}
-                        />
-                        <Form.Text className="text-muted">
-                          Usado na URL (somente letras, números e hífens).
-                        </Form.Text>
-                        <Form.Control.Feedback type="invalid">
-                          Informe o slug.
-                        </Form.Control.Feedback>
-                      </Form.Group>
-                    </Col>
-
-                    <Col xs={12}>
-                      <Form.Group controlId="catDescricao">
-                        <Form.Label>Descrição</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          rows={3}
-                          name="descricao"
-                          placeholder="Descrição opcional da categoria…"
-                          value={form.descricao}
-                            /*onChange={handleChange}*/
-                        />
-                      </Form.Group>
-                    </Col>
-
-                    <Col xs={12}>
-                      <Form.Check
-                        type="switch"
-                        id="catAtivo"
-                        name="ativo"
-                        label="Ativo"
-                        checked={form.ativo}
-                        /*onChange={handleChange}*/
-                      />
-                    </Col>
-
-                    <Col xs={12} className="d-flex gap-2">
-                      <Button type="submit" variant="dark" /*disabled={!isValid || saving}*/ >
-                        {saving ? (<><Spinner size="sm" className="me-2" /> Salvando…</>) : "Salvar"}
-                      </Button>
-                      <Button
-                        variant="outline-secondary"
-                        type="button"
-                        onClick={() => setForm({ nome: "", slug: "", descricao: "", ativo: true })}
-                        disabled={saving}
-                      >
-                        Limpar
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+            {loading ? (
+              <div className="d-flex justify-content-center py-5">
+                <Spinner animation="border" role="status" />
+              </div>
+            ) : (
+              <div className="table-responsive">
+                <Table hover className="align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Empresa</th>
+                      <th>Local</th>
+                      <th>Tipo</th>
+                      <th>Início</th>
+                      <th>Valor</th>
+                      <th>Contato</th>
+                      <th style={{ width: 180 }}>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {list.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="text-center py-4 text-muted">
+                          Nenhum registro encontrado.
+                        </td>
+                      </tr>
+                    ) : (
+                      list.map((c) => (
+                        <tr key={c.id}>
+                          <td>{c.empresaNome}</td>
+                          <td>{c.empresaLocal}</td>
+                          <td>{c.empresaTipoContrato}</td>
+                          <td>{c.dataInicioContrato}</td>
+                          <td>{c.valorContrato != null ? money.format(c.valorContrato) : "-"}</td>
+                          <td>{c.empresaContato}</td>
+                          <td className="text-end">
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              className="me-2"
+                              onClick={() => openEdit(c)}
+                            >
+                              <FaEdit className="me-1" /> Editar
+                            </Button>
+                            <Button
+                              variant="outline-danger"
+                              size="sm"
+                              onClick={() => handleDelete(c)}
+                              disabled={deletingId === c.id}
+                            >
+                              <FaTrash className="me-1" />
+                              {deletingId === c.id ? "Excluindo..." : "Excluir"}
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
       </Container>
+
+      {/* Modal de edição */}
+      <Modal show={show} onHide={() => setShow(false)} centered>
+        <Form onSubmit={handleSave} noValidate>
+          <Modal.Header closeButton>
+            <Modal.Title>Editar Empresa</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row className="g-3">
+              <Col md={6}>
+                <Form.Group controlId="empresaTipoContrato">
+                  <Form.Label>Tipo do Contrato</Form.Label>
+                  <Form.Select
+                    className="input-pill"
+                    value={form.empresaTipoContrato}
+                    onChange={(e) => onChange("empresaTipoContrato", e.target.value)}
+                  >
+                    <option value="">Selecione…</option>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Website">Website</option>
+                    <option value="Outro">Outro</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+
+              <Col md={6}>
+                <Form.Group controlId="empresaNome">
+                  <Form.Label>Nome da Empresa</Form.Label>
+                  <Form.Control
+                    className="input-pill"
+                    value={form.empresaNome}
+                    onChange={(e) => onChange("empresaNome", e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+
+              <Col md={8}>
+                <Form.Group controlId="empresaLocal">
+                  <Form.Label>Local da Empresa</Form.Label>
+                  <Form.Control
+                    className="input-pill"
+                    value={form.empresaLocal}
+                    onChange={(e) => onChange("empresaLocal", e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+
+              <Col md={4}>
+                <Form.Group controlId="dataInicioContrato">
+                  <Form.Label>Data Início</Form.Label>
+                  <Form.Control
+                    type="date"
+                    className="input-pill"
+                    value={form.dataInicioContrato}
+                    onChange={(e) => onChange("dataInicioContrato", e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+
+              <Col md={6}>
+                <Form.Group controlId="valorContrato">
+                  <Form.Label>Valor do Contrato</Form.Label>
+                  <Form.Control
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="input-pill"
+                    value={form.valorContrato}
+                    onChange={(e) => onChange("valorContrato", e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+
+              <Col md={6}>
+                <Form.Group controlId="empresaContato">
+                  <Form.Label>Contato Responsável</Form.Label>
+                  <Form.Control
+                    className="input-pill"
+                    value={form.empresaContato}
+                    onChange={(e) => onChange("empresaContato", e.target.value)}
+                  />
+                </Form.Group>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShow(false)} disabled={saving}>
+              Cancelar
+            </Button>
+            <Button type="submit" variant="primary" disabled={saving}>
+              {saving ? <Spinner size="sm" className="me-2" /> : null}
+              Salvar
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </section>
   );
 }

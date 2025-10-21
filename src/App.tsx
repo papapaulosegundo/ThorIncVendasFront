@@ -11,11 +11,12 @@ import ContactList from "./pages/contact/ContactList";
 import OpcoesClientes from "./pages/clients/OpcoesCliente";
 import CadastroCliente from "./pages/clients/CadastroCliente";
 import EditarCliente from "./pages/clients/EditarCliente";
+import DashboardEmpresas from "./pages/dashboard/Dashboard";
 import "./app.css";
 
 export default function App() {
   const { pathname } = useLocation();
-  const hideChrome = ["/contatosFormulario"];
+  const hideChrome = ["/contatosFormulario", "/clientes/cadastro", "/clientes/edit", "/empresas/dashboard"];
   const shouldHide = hideChrome.includes(pathname);
 
   return (
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/clientes/opcoes" element={<OpcoesClientes />}/>
           <Route path="/clientes/cadastro" element={<CadastroCliente />}/>
           <Route path="/clientes/edit" element={<EditarCliente />}/>
+          <Route path="/empresas/dashboard" element={<DashboardEmpresas />} />
         </Routes>
       {!shouldHide && <Footer />}
     </>

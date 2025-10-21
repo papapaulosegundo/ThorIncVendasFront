@@ -12,7 +12,7 @@ export default function OpcoesClientes() {
             <Container>
                 <header className="section-header text-center">
                     <h2 className="section-heading">
-                    Gestão do Ecommerce
+                    Gestão da Aplicação
                     </h2>
                 </header>
 
