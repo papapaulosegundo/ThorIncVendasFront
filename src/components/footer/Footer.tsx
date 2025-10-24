@@ -1,15 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
-import {
-  FaClock,
-  FaPhoneAlt,
-  FaEnvelope,
-  FaDesktop,
-  FaLinkedin,
-  FaInstagram,
-  FaGithub,
-} from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaClock, FaPhoneAlt, FaEnvelope, FaDesktop, FaLinkedin, FaInstagram, FaGithub, FaRegistered} from "react-icons/fa";
 import "../../styles/index.css";
-
 
 function Footer() {
   return (
@@ -66,7 +58,10 @@ function Footer() {
         <Row>
           <Col className="text-center mt-4">
             <p className="footer-text">
-              Created by <span>Thor Inc</span> © All Rights Reserved
+              Created by <span>Thor Inc</span> © All Rights Reserved 
+              <Link to="/login" className="secret-login" aria-label="Área restrita (login)" title="Área restrita">
+                <FaRegistered/>
+              </Link>
             </p>
           </Col>
         </Row>

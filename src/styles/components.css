@@ -646,3 +646,13 @@
   align-items: flex-start;        /* começa logo abaixo da navbar */
   padding: 6vh 0 8vh;            /* ajuste fino do respiro */
 }
+
+html {
+  overflow-y: auto;
+  scrollbar-gutter: stable;     /* Chrome/Edge/Firefox */
+}
+
+/* Fallback para navegadores sem suporte (ex.: Safari antigo) */
+@supports not (scrollbar-gutter: stable) {
+  html { overflow-y: scroll; }  /* sempre reserva espaço */
+}

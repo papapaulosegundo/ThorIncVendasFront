@@ -1,8 +1,6 @@
 // src/pages/clientes/EditarCliente.tsx
 import { useEffect, useMemo, useState } from "react";
-import {
-  Container, Row, Col, Form, Table, Spinner, Card, Button, Modal
-} from "react-bootstrap";
+import {Container, Row, Col, Form, Table, Spinner, Card, Button, Modal, Badge} from "react-bootstrap";
 import Swal from "sweetalert2";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import api from "../../services/api";
@@ -15,6 +13,7 @@ type Empresa = {
   dataInicioContrato: string;    
   valorContrato: number | null;  
   empresaContato: string;
+  empresaAtivo: boolean; 
 };
 
 type FormEmpresa = {
@@ -24,6 +23,7 @@ type FormEmpresa = {
   dataInicioContrato: string;
   valorContrato: string;         
   empresaContato: string;
+  empresaAtivo: boolean;
 };
 
 export default function EditarCliente() {
@@ -42,6 +42,7 @@ export default function EditarCliente() {
     dataInicioContrato: "",
     valorContrato: "",
     empresaContato: "",
+    empresaAtivo: true,
   });
   const [saving, setSaving] = useState(false);
 
@@ -68,9 +69,9 @@ export default function EditarCliente() {
   }, []);
 
   const list = useMemo(() => {
-    const q = filterEmpresa.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((c) => (c.empresaNome || "").toLowerCase().includes(q));
+    const filtro = filterEmpresa.trim().toLowerCase();
+    if (!filtro) return items;
+    return items.filter((c) => (c.empresaNome || "").toLowerCase().includes(filtro));
   }, [items, filterEmpresa]);
 
   function openEdit(row: Empresa) {
@@ -82,6 +83,7 @@ export default function EditarCliente() {
       dataInicioContrato: row.dataInicioContrato || "",
       valorContrato: row.valorContrato != null ? String(row.valorContrato) : "",
       empresaContato: row.empresaContato || "",
+      empresaAtivo: !!row.empresaAtivo,
     });
     setShow(true);
   }
@@ -103,6 +105,7 @@ export default function EditarCliente() {
         dataInicioContrato: form.dataInicioContrato, // yyyy-MM-dd
         valorContrato: form.valorContrato ? Number(form.valorContrato) : null,
         empresaContato: form.empresaContato.trim(),
+         empresaAtivo: form.empresaAtivo,
       });
 
       // atualiza lista local
@@ -117,6 +120,7 @@ export default function EditarCliente() {
                 dataInicioContrato: form.dataInicioContrato,
                 valorContrato: form.valorContrato ? Number(form.valorContrato) : null,
                 empresaContato: form.empresaContato.trim(),
+                empresaAtivo: form.empresaAtivo,  // (novo)
               }
             : it
         )
@@ -214,6 +218,7 @@ export default function EditarCliente() {
                       <th>Início</th>
                       <th>Valor</th>
                       <th>Contato</th>
+                      <th>Status</th>
                       <th style={{ width: 180 }}>Ações</th>
                     </tr>
                   </thead>
@@ -233,23 +238,17 @@ export default function EditarCliente() {
                           <td>{c.dataInicioContrato}</td>
                           <td>{c.valorContrato != null ? money.format(c.valorContrato) : "-"}</td>
                           <td>{c.empresaContato}</td>
+                          <td>
+                            <Badge bg={c.empresaAtivo ? "success" : "secondary"} pill>
+                              {c.empresaAtivo ? "Ativo" : "Inativo"}
+                            </Badge>
+                          </td>
                           <td className="text-end">
-                            <Button
-                              variant="outline-primary"
-                              size="sm"
-                              className="me-2"
-                              onClick={() => openEdit(c)}
-                            >
+                            <Button variant="outline-primary" size="sm" className="me-2" onClick={() => openEdit(c)}>
                               <FaEdit className="me-1" /> Editar
                             </Button>
-                            <Button
-                              variant="outline-danger"
-                              size="sm"
-                              onClick={() => handleDelete(c)}
-                              disabled={deletingId === c.id}
-                            >
-                              <FaTrash className="me-1" />
-                              {deletingId === c.id ? "Excluindo..." : "Excluir"}
+                            <Button variant="outline-danger" size="sm" onClick={() => handleDelete(c)} disabled={deletingId === c.id}>
+                              <FaTrash className="me-1" />{deletingId === c.id ? "Excluindo..." : "Excluir"}
                             </Button>
                           </td>
                         </tr>
@@ -343,6 +342,20 @@ export default function EditarCliente() {
                     value={form.empresaContato}
                     onChange={(e) => onChange("empresaContato", e.target.value)}
                   />
+                </Form.Group>
+              </Col>
+
+              <Col md={6}>
+                <Form.Group controlId="empresaAtivo">
+                  <Form.Label>Status da Empresa</Form.Label>
+                  <Form.Select
+                    className="input-pill"
+                    value={String(form.empresaAtivo)}
+                    onChange={(e) => setForm((p) => ({ ...p, empresaAtivo: e.target.value === "true" }))}
+                  >
+                    <option value="true">Ativo</option>
+                    <option value="false">Inativo</option>
+                  </Form.Select>
                 </Form.Group>
               </Col>
             </Row>
